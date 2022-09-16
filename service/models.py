@@ -30,5 +30,19 @@ class StateIncomeCounts(models.Model):
         verbose_name = 'state_income_distribution'
         verbose_name_plural = verbose_name
 
+class Sa4IncomeCounts(models.Model):
+    """table stores household counts broken down by SA4 Region, Household Composition and
+        Weekly Household Income Bracket
+    """
+    sa4_id = models.ForeignKey("Sa4StateConfig", on_delete=models.PROTECT, db_index=True)
+    sa4_region_name = models.CharField('sa4_region_name', max_length=64, null=False, blank=False, db_index=True)
+    state_id = models.IntegerField("state_id", null=False, blank=False, db_index=True)
+    household_composition = models.CharField('household_composition', max_length=64, null=False, blank=False, db_index=True)
+    weekly_household_income = models.CharField('weekly_household_income', max_length=64, null=False, blank=False, db_index=True)
+    count = models.IntegerField('count', max_length=64, null=True, blank=True)
 
+    class Meta:
+        db_table = 'counts_sa4_income'
+        verbose_name = 'sa4_income_distribution'
+        verbose_name_plural = verbose_name
 
