@@ -56,7 +56,7 @@ class DisplaySa4StateinfoView(GenericAPIView):
 
 
 class DisplayStateListView(GenericAPIView):
-    """show all state information first drop-down list
+    """Show all state types first drop-down list
     """
 
     def get(self, request):
@@ -69,7 +69,7 @@ class DisplayStateListView(GenericAPIView):
 
 
 class DisplayHouseholdCompositionListView(GenericAPIView):
-    """show all state information first drop-down list
+    """Show all household composition types in the second drop-down list
     """
 
     def get(self, request):
@@ -82,7 +82,7 @@ class DisplayHouseholdCompositionListView(GenericAPIView):
 
 
 class WeeklyHouseholdIncomeListView(GenericAPIView):
-    """show all state information first drop-down list
+    """Show all income buckets types in the third drop-down list
     """
 
     def get(self, request):
