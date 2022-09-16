@@ -66,3 +66,29 @@ class DisplayStateListView(GenericAPIView):
         state_info_list = [i for i in queryset]
 
         return Response(data=state_info_list)
+
+
+class DisplayHouseholdCompositionListView(GenericAPIView):
+    """show all state information first drop-down list
+    """
+
+    def get(self, request):
+
+
+        queryset = models.StateIncomeCounts.objects.values('household_composition').distinct().order_by('household_composition')
+        household_composition_list = [i for i in queryset]
+
+        return Response(data=household_composition_list)
+
+
+class WeeklyHouseholdIncomeListView(GenericAPIView):
+    """show all state information first drop-down list
+    """
+
+    def get(self, request):
+
+
+        queryset = models.StateIncomeCounts.objects.values('weekly_household_income').distinct().order_by('weekly_household_income')
+        household_composition_list = [i for i in queryset]
+
+        return Response(data=household_composition_list)

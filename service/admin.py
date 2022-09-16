@@ -15,3 +15,12 @@ class Sa4StateConfigAdmin(resourceadmin.ImportExportModelAdmin):
     resource_class = Sa4StateConfigResource
 
 
+class StateIncomeCountsResource(resources.ModelResource):
+    class Meta:
+        model = models.StateIncomeCounts
+
+@admin.register(models.StateIncomeCounts)
+class StateIncomeCountsAdmin(resourceadmin.ImportExportModelAdmin):
+    list_display = ('id', 'state_id', 'state_name', 'household_composition', 'weekly_household_income','count')
+    search_fields = ('state_id', 'state_name', 'household_composition', 'weekly_household_income')
+    resource_class = StateIncomeCountsResource
