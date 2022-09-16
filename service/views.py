@@ -54,3 +54,15 @@ class DisplaySa4StateinfoView(GenericAPIView):
         return serializer.validated_data
 
 
+
+class DisplayStateListView(GenericAPIView):
+    """show all state information first drop-down list
+    """
+
+    def get(self, request):
+
+
+        queryset = models.Sa4StateConfig.objects.values('state_id','state_name').distinct().order_by('state_id')
+        state_info_list = [i for i in queryset]
+
+        return Response(data=state_info_list)
