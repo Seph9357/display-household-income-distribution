@@ -61,7 +61,7 @@ class DisplayStateListView(GenericAPIView):
 
     def get(self, request):
 
-        queryset = models.Sa4StateConfig.objects.values('state_id','state_name').distinct().order_by('state_id')
+        queryset = models.Sa4StateConfig.objects.values('state_id', 'state_name').distinct().order_by('state_id')
         state_info_list = [i for i in queryset]
 
         return Response(data=state_info_list)
@@ -126,3 +126,14 @@ class FilterView(GenericAPIView):
         else:
             raise IDException(message="Sorry, no results after combined filter search")
 
+
+class DisplaySA4ListView(GenericAPIView):
+    """Show all SA4 types in the fourth drop-down list
+    """
+
+    def get(self, request):
+
+        queryset = models.Sa4StateConfig.objects.values('sa4_id', 'sa4_region_name').distinct().order_by('state_id')
+        sa4_info_list = [i for i in queryset]
+
+        return Response(data=sa4_info_list)
