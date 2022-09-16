@@ -61,7 +61,6 @@ class DisplayStateListView(GenericAPIView):
 
     def get(self, request):
 
-
         queryset = models.Sa4StateConfig.objects.values('state_id','state_name').distinct().order_by('state_id')
         state_info_list = [i for i in queryset]
 
@@ -73,7 +72,6 @@ class DisplayHouseholdCompositionListView(GenericAPIView):
     """
 
     def get(self, request):
-
 
         queryset = models.StateIncomeCounts.objects.values('household_composition').distinct().order_by('household_composition')
         household_composition_list = [i for i in queryset]
@@ -87,8 +85,44 @@ class WeeklyHouseholdIncomeListView(GenericAPIView):
 
     def get(self, request):
 
-
         queryset = models.StateIncomeCounts.objects.values('weekly_household_income').distinct().order_by('weekly_household_income')
         household_composition_list = [i for i in queryset]
 
         return Response(data=household_composition_list)
+
+
+class FilterView(GenericAPIView):
+    """This API will show all income distribution information with combined filter search
+        by state, household composition, Weekly Household Income
+    """
+
+    def initial(self, request, *args, **kwargs):
+        """Initiate to acquire the input parameters
+        """
+        super().initial(request, *args, **kwargs)
+
+        all_state_list = [i for i in models.Sa4StateConfig.objects.values_list('state_name', flat=True).distinct()]
+        all_household_composition_list = [i for i in models.StateIncomeCounts.objects.values_list('household_composition', flat=True).distinct()]
+        all_weekly_household_income_list = [i for i in models.StateIncomeCounts.objects.values_list('weekly_household_income', flat=True).distinct()]
+
+        # Following decisions on value assignment will cover the the scenario that
+        # clients do not choose one or more selection field.
+        # Then by default, if there is no selection, it essentially means select all against this field.
+        self.state_name = [i for i in [request.data.get("state_name")] if i != ''] or all_state_list
+        self.household_composition = [i for i in [request.data.get("household_composition")] if i != ''] or all_household_composition_list
+        self.weekly_household_income = [i for i in [request.data.get("weekly_household_income")] if i != ''] or all_weekly_household_income_list
+
+
+    def post(self, request):
+        # make ORM query
+        queryset = models.Sa4IncomeCounts.objects.filter(
+            Q(sa4__state_name__in=self.state_name) & Q(household_composition__in=self.household_composition) & Q(
+                weekly_household_income__in=self.weekly_household_income)).values(
+            'sa4_region_name', 'sa4__state_name', 'household_composition', 'weekly_household_income', 'count')
+
+        if queryset.exists():
+            data = [i for i in queryset]
+            return Response(data=data)
+        else:
+            raise IDException(message="Sorry, no results after combined filter search")
+

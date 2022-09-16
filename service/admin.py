@@ -24,3 +24,14 @@ class StateIncomeCountsAdmin(resourceadmin.ImportExportModelAdmin):
     list_display = ('id', 'state_id', 'state_name', 'household_composition', 'weekly_household_income','count')
     search_fields = ('state_id', 'state_name', 'household_composition', 'weekly_household_income')
     resource_class = StateIncomeCountsResource
+
+
+class Sa4IncomeCountsResource(resources.ModelResource):
+    class Meta:
+        model = models.Sa4IncomeCounts
+
+@admin.register(models.Sa4IncomeCounts)
+class Sa4IncomeCountsAdmin(resourceadmin.ImportExportModelAdmin):
+    list_display = ('id', 'sa4_id', 'sa4_region_name', 'state_id',  'household_composition', 'weekly_household_income', 'count')
+    search_fields = ('sa4_id', 'sa4_region_name', 'state_id', 'household_composition', 'weekly_household_income')
+    resource_class = Sa4IncomeCountsResource
