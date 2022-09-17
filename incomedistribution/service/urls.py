@@ -11,6 +11,6 @@ urlpatterns = [
     url(r'service/weeklyhouseholdincomelistdisplay/?$', views.WeeklyHouseholdIncomeListView.as_view()),
     url(r'service/filterview/?$', views.FilterView.as_view()),
     url(r'service/sa4listdisplay/?$', views.DisplaySA4ListView.as_view()),
-
+    url(r'service/a4statecomparedisplay/?$', views.Sa4StateCompareView.as_view()),
 
 ]

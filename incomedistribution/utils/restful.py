@@ -22,7 +22,7 @@ def unique_id():
     return str(uuid.uuid4())
 
 def exception_handler(exc, context):
-    """handle and solve exceptions
+    """Handle and solve exceptions
     """
 
     logger.info("Invalid Request", exc_info=exc)
@@ -66,7 +66,7 @@ def exception_handler(exc, context):
 
 
 class WrapperJSONRender(renderers.JSONRenderer):
-    """After encapsulation, final the JSON format:
+    """After encapsulation, finalize the JSON format:
 
     ```
     {
