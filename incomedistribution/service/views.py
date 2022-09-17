@@ -154,11 +154,11 @@ class Sa4StateCompareView(GenericAPIView):
     def post(self, request):
 
         # Compute count proportion data against sa4
-        # Make ORM query: select sum(count) as totol_count where sa4_region_name=self.sa4_region_name groupby weekly_household_income
+        # Make ORM query: select sum(count) as total_count_one from counts_sa4_income where sa4_region_name=self.sa4_region_name groupby weekly_household_income
         qs_one_sa4 = models.Sa4IncomeCounts.objects.filter(sa4_region_name=self.sa4_region_name).values('weekly_household_income').order_by('weekly_household_income').annotate(total_count_one=Sum('count'))
         # Numerator of the counts proportion:   One region's total counts in each different income buckets
         df_one_sa4 = pd.DataFrame([i for i in qs_one_sa4])
-        # Make ORM query: select sum(count) as totol_count groupby weekly_household_income
+        # Make ORM query: select sum(count) as total_count_all from counts_sa4_income groupby weekly_household_income
         qs_all_sa4 = models.Sa4IncomeCounts.objects.values('weekly_household_income').order_by('weekly_household_income').annotate(total_count_all=Sum('count'))
         # Denominator of the counts proportion: All regions' total counts in each different income buckets
         df_all_sa4 = pd.DataFrame([i for i in qs_all_sa4])
@@ -168,12 +168,11 @@ class Sa4StateCompareView(GenericAPIView):
         sa4_prop_lst = df_merge_sa4.to_dict(orient='records')
 
         # Compute count proportion data against state
-        # Make ORM query: select sum(count) as totol_count where state_name=self.state_name groupby weekly_household_income
+        # Make ORM query: select sum(count) as total_count_one from counts_state_income where state_name=self.state_name groupby weekly_household_income
         qs_one_state = models.StateIncomeCounts.objects.filter(state_name=self.state_name).values('weekly_household_income').order_by('weekly_household_income').annotate(total_count_one=Sum('count'))
         # Numerator of the counts proportion:   One state's total counts in each different income buckets
         df_one_state = pd.DataFrame([i for i in qs_one_state])
-
-        # Make ORM query: select sum(count) as totol_count groupby weekly_household_income
+        # Make ORM query: select sum(count) as total_count_all from counts_state_income groupby weekly_household_income
         qs_all_state = models.StateIncomeCounts.objects.values('weekly_household_income').order_by('weekly_household_income').annotate(total_count_all=Sum('count'))
         # Denominator of the counts proportion: All states's total counts in each different income buckets
         df_all_state = pd.DataFrame([i for i in qs_all_state])
